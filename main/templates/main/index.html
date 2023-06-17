@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ student.name }}</title>
+</head>
+<body>
+    <li><b>Имя:</b> {{ student.name }}</li>
+              <li><b>Фамилия:</b> {{ student.surname }}</li>
+              <li><b>Дата рождения:</b> {{ student.birth_date }}</li>
+              <li><b>ИИН:</b> {{ student.iin }}</li>
+              <li><b>Пол :</b>  {% if student.gender == 'M' %}
+                                  Мужской
+                                {% elif student.gender == 'W' %}
+                                  Женский
+                                {% endif %} </li>
+              <li><b>Группа:</b> {{ student.group }}  </li>
+            </ul>
+</body>
+</html>

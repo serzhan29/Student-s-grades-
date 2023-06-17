@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="{% static 'main/css/stylefrr.css' %}">
+		<title>{{ student.name }}</title>
+	</head>
+
+		<font size="5px">
+
+		<center>
+
+		<table border="1" cellpadding="0" cellspacing="0" width="50%" bgcolor="white">
+				<a href="/">Студенты</a> <br>
+			{{ student.surname }} {{ student.name }} {{ student.gpa }} балл
+		<table>
+			<thead>
+				<tr>
+						<th>Предметы АКБ 1</th>
+						<th>1 неделя</th><th>2 неделя</th><th>3 неделя</th><th>4 неделя</th>
+					<th>5 неделея</th>	<th>6 неделя</th><th>7 неделя</th><th>РК 1 оценка</th><th>РК 1 итог</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for srs_one in srs_ones %}
+				<tr>
+					<td>{{ srs_one.subject }}</td>
+
+					<td>{{ srs_one.week1 }}</td><td>{{ srs_one.week2 }}</td><td>{{ srs_one.week3 }}</td>
+					<td>{{ srs_one.week4 }}</td><td>{{ srs_one.week5 }}</td><td>{{ srs_one.week6 }}</td>
+					<td>{{ srs_one.week7 }}</td>
+
+					<td>{{ srs_one.SRS_1 }}</td>
+					<td>
+					 <form method="POST" action="">
+						{% csrf_token %}
+						<input type="hidden" name="srs_one_id" value="{{ srs_one.id }}">
+						<input type="submit" value="Рассчет АКБ 1">
+					 </form>
+					</td>
+					<td>{{ srs_one.result|floatformat:0 }}</td>
+
+				</tr>
+				{% endfor %}
+				<table>
+					<thead>
+						<tr>
+							<th>Предметы АКБ 2</th>
+							<th>8 неделя</th><th>9 неделя</th><th>10 неделя</th>
+							<th>11 неделя</th><th>12 неделея</th><th>13 неделя</th>
+							<th>14 неделя</th><th>15 неделя</th><th>РК 2 оценка</th>
+							<th>РК 2 итог</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for srs_two in srs_twos %}
+						<tr>
+							<td>{{ srs_two.subject }}</td>
+							<td>{{ srs_two.week8 }}</td>
+							<td>{{ srs_two.week9 }}</td>
+							<td>{{ srs_two.week10 }}</td>
+							<td>{{ srs_two.week11 }}</td>
+							<td>{{ srs_two.week12 }}</td>
+							<td>{{ srs_two.week13 }}</td>
+							<td>{{ srs_two.week14 }}</td>
+							<td>{{ srs_two.week15 }}</td>
+							<td>{{ srs_two.SRS_2 }}</td>
+							<td>
+								<form method="POST" action="">
+									{% csrf_token %}
+									<input type="hidden" name="srs_two_id" value="{{ srs_two.id }}">
+									<input type="submit" value="Рассчет АКБ 2">
+								</form>
+							</td>
+							<td>{{ srs_two.result2|floatformat:0 }}</td>
+						</tr>
+						{% endfor %}
+
+						<table>
+						  <thead>
+							<tr>
+							  <th>Итоговые экзаменов</th>
+							  <th>Оценка за экзамен</th>
+							  <th>Итог предмета</th>
+							</tr>
+						  </thead>
+						  <tbody>
+							{% for final_result in final_results %}
+							<tr>
+							  <td>{{ final_result.subject }}</td>
+							  <td>{{ final_result.exam_grade }}</td>
+							  <td>
+								<form method="POST" action="">
+								  {% csrf_token %}
+								  <input type="hidden" name="final_result_id" value="{{ final_result.id }}">
+								  <input type="submit" value="Рассчет оценки за экзамен">
+								</form>
+							  </td>
+								 <td>{{ final_result.final_result2|floatformat:0 }}</td>
+							</tr>
+
+							{% endfor %}
+							<tr>
+							  <td colspan="4">
+								<form action="{% url 'table2' student.url %}" method="post">
+								  {% csrf_token %}
+								  <input type="submit" value="Calculate GPA">
+								  <p>GPA: {{student.gpa}}</p>
+								</form>
+							  </td>
+							</tr>
+						  </tbody>
+						</table>
+
+			</tbody>
+		</table>
+	</body>
+</html>
