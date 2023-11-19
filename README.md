@@ -1,2 +1,3 @@
-# Student-s-grades- Django- MySQL
--
+# Student-s-grades
+Python+Django+MySQL
+
