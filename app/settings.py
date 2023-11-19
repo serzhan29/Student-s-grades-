@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a+%7zp#=*me4l3k^yio=#5hazbb4a%xl)(!s#)nfx!=qj2cprx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     "django.contrib.staticfiles",
     'debug_toolbar',
-    'main',
-
     'django_extensions',
+    'main',
+    'timetable',
 
 ]
 
@@ -142,21 +142,8 @@ INTERNAL_IPS = [
 ]
 
 # settings.py
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
+LOGIN_URL = 'login'  # Укажите URL для авторизации
+LOGIN_REDIRECT_URL = 'home'  # Укажите URL для перенаправления после успешного входа
 
 
 

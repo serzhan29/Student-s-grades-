@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Группы</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .group-link {
+            margin-bottom: 20px;
+            text-align: center; /* Центрирование текста в блоке */
+        }
+
+        a.group-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-decoration: none;
+            color: #3498db; /* Цвет текста кнопки */
+            background-color: #ecf0f1; /* Цвет фона кнопки */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.group-button:hover {
+            background-color: #bdc3c7; /* Измененный цвет фона при наведении */
+        }
+    </style>
+</head>
+
+<body>
+        <p>Количество групп: {{ groups|length }}</p>
+
+        {% for group, students in groups.items %}
+        <div class="group-link">
+            <a class="group-button" href="{% url 'teacher_subject_grades' teacher_url=teacher.url group_link=group.link %}">
+                Посмотреть оценки {{ group.name }} ({{ students.count }} студентов)
+            </a>
+        </div>
+        {% endfor %}
+</body>
+
+</html>
+{% endblock %}

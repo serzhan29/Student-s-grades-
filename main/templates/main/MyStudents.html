@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль учителя</title>
+</head>
+<body>
+    <h1>Профиль учителя: {{ teacher.name }} {{ teacher.surname }}</h1>
+
+    <h2>Преподаваемые группы:</h2>
+    <ul>
+        {% for group in teacher.group.all %}
+            <li>{{ group.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Студенты в этих группах:</h2>
+    <ul>
+        {% for group in teacher.group.all %}
+            <li>{{ group.name }}</li>
+            <ul>
+                {% for student in group.student_set.all %}
+                    <li>{{ student.name }} {{ student.surname }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+</body>
+</html>

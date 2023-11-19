@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/stylefrr.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<style type="text/css">
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    cursor: pointer;
+  }
+
+  form {
+    margin-top: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="number"], select {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+</style>
+
+<h1></h1>
+<br>
+<hr>
+<br>
+{% if subjects_taught %}
+<!-- АКБ-1 -->
+<table>
+    <thead>
+        <tr>
+            <th>Surname</th>
+            <th>Name</th>
+            <th> 1 </th>
+            <th> 2 </th>
+            <th> 3 </th>
+            <th> 4 </th>
+            <th> 5 </th>
+            <th> 6 </th>
+            <th> 7 </th>
+            <th>1-БЛОК</th>
+            <th>ИТОГ 1-БЛОК</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student, grade in zipped_data %}
+            <tr>
+                <td>{{ student.surname }}</td>
+                <td>{{ student.name }}</td>
+                <td>
+                    <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="1" data-srs-type="1">{{ grade.week1 }}</button>
+                </td>
+                <td>{{ grade.week2 }}</td>
+                <td>{{ grade.week3 }}</td>
+                <td>{{ grade.week4 }}</td>
+                <td>{{ grade.week5 }}</td>
+                <td>{{ grade.week6 }}</td>
+                <td>{{ grade.week7 }}</td>
+                <td>{{ grade.SRS_1 }}</td>
+                <td>{{ grade.result }}</td>
+            </tr>
+        {% endfor %}
+{% else %}
+    <p>No subjects taught by this teacher in the specified group.</p>
+{% endif %}
+</table>
+<br>
+<hr>
+<br>
+
+<!-- АКБ-2 -->
+{% if zipped_data_2  %}
+    <table>
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>2-БЛОК</th>
+                <th>Итог 2-БЛОКА</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student, grade2 in zipped_data_2 %}
+                <tr>
+                    <td>{{ student.surname }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="1" data-srs-type="1">{{ grade2.week8 }}</button>
+                    </td>
+                    <td>{{ grade2.week9 }}</td>
+                    <td>{{ grade2.week10 }}</td>
+                    <td>{{ grade2.week11 }}</td>
+                    <td>{{ grade2.week12 }}</td>
+                    <td>{{ grade2.week13 }}</td>
+                    <td>{{ grade2.week14 }}</td>
+                    <td>{{ grade2.week15 }}</td>
+                    <td>{{ grade2.SRS_2 }}</td>
+                    <td>{{ grade2.result2 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No subjects taught by this teacher in the specified group.</p>
+{% endif %}
+
+  <!-- Модальное окно -->
+  <div id="grade-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h4>Выберите оценку:</h4>
+      <form method="POST" id="grade-form">
+        {% csrf_token %}
+        <input type="hidden" name="student_id" id="modal-student-id" value="">
+        <input type="hidden" name="week" id="modal-week" value="">
+        <label for="grade">Оценка: </label>
+        <input type="number" name="grade" id="modal-grade" min="0" max="100">
+        <label for="converted_grade">Посещение:</label>
+        <select name="converted_grade" id="modal-converted-grade">
+          <option value="+">Был</option>
+          <option value="Н">Нету</option>
+        </select>
+        <button type="submit" id="modal-submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Открыть модальное окно при нажатии на ячейку
+    const cells = document.getElementsByClassName('edit-grade-btn');
+    const modal = document.getElementById('grade-modal');
+    const span = document.getElementsByClassName('close')[0];
+    const form = document.getElementById('grade-form');
+    const studentIdInput = document.getElementById('modal-student-id');
+    const weekInput = document.getElementById('modal-week');
+
+    Array.from(cells).forEach(cell => {
+      cell.addEventListener('click', () => {
+        const studentId = cell.dataset.studentId;
+        const week = cell.dataset.week;
+        studentIdInput.value = studentId;
+        weekInput.value = week;
+        modal.style.display = 'block';
+      });
+    });
+
+    // Закрыть модальное окно при нажатии на "Крестик"
+    span.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    // Закрыть модальное окно при нажатии вне его области
+    window.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Отправить форму при нажатии на "Сохранить"
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      // Добавьте здесь код для отправки формы AJAX
+      // и обработки серверного ответа
+    });
+  </script>
+{% endblock %}

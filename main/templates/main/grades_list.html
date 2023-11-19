@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,43 +7,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Главная страница</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f2f2f2;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        ul.movie-info {
-            list-style-type: none;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        ul.movie-info li {
-            margin-bottom: 5px;
-        }
-
-        ul.movie-info li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .gpa {
-            font-size: 14px;
-            color: #777;
-            margin-top: 5px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/grades.css' %}">
 </head>
 <body>
     <h1>ААЖ-114</h1>

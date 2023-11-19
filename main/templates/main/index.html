@@ -1,23 +1,38 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ student.name }}</title>
+{% extends 'base.html' %}
+{% block content %}
 </head>
 <body>
-    <li><b>Имя:</b> {{ student.name }}</li>
-              <li><b>Фамилия:</b> {{ student.surname }}</li>
-              <li><b>Дата рождения:</b> {{ student.birth_date }}</li>
-              <li><b>ИИН:</b> {{ student.iin }}</li>
-              <li><b>Пол :</b>  {% if student.gender == 'M' %}
-                                  Мужской
-                                {% elif student.gender == 'W' %}
-                                  Женский
-                                {% endif %} </li>
-              <li><b>Группа:</b> {{ student.group }}  </li>
+        {% if user.teacher %}
+            <h1>Зашел учитель</h1>
+            <p>Имя: {{ user.teacher.name }}</p>
+            <p>Фамилия: {{ user.teacher.surname }}</p>
+            <p>Предметы учителя:</p>
+            <ul>
+                {% for subject in user.teacher.subject.all %}
+                    <li>{{ subject.name }}</li>
+                {% empty %}
+                    <li>У учителя нет предметов</li>
+                {% endfor %}
             </ul>
+            <p>Группы учителя:</p>
+            <ul>
+                {% for group in user.teacher.group.all %}
+                    <li>{{ group.name }}</li>
+                {% empty %}
+                    <li>У учителя нет групп</li>
+                {% endfor %}
+            </ul>
+        {% elif user.student %}
+            <h1>Зашел студент</h1>
+            <p>Имя: {{ user.student.name }}</p>
+            <p>Фамилия: {{ user.student.surname }}</p>
+        {% else %}
+            <h1>Ошибка 404: Пользователь не найден или у него нет прав</h1>
+        {% endif %}
+        <!-- <div class="iframe-container">
+            <iframe src="https://talapker.ayu.edu.kz/" frameborder="0" allowfullscreen></iframe>
+        </div> -->
+    </main>
 </body>
 </html>
+{% endblock %}

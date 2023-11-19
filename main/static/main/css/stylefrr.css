@@ -1,75 +1,111 @@
-body {
-    margin: 20px;
-}
-
+/* Базовые стили таблицы */
 table {
-    width: 100%;
-    margin-bottom: 18px;
+    width: calc(100% - 100px); /* Вычитаем 20px отступа слева и 20px отступа справа */
+    margin: 0 auto; /* Центрируем таблицу на странице */
+    margin-left: 100px !important; /* Затем установим отступ слева с важным приоритетом */
+    margin-right: 100px !important; /* И отступ справа с важным приоритетом */
     padding: 0;
-    font-size: 13px;
-    border: 1px solid #141415;
+    font-size: 14px;
+    border: 1px solid #1f1f1f;
     border-spacing: 0;
-    border-collapse: separate;
-	-webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-collapse: collapse;
     border-radius: 5px;
-    background-color: #37393c;
+    background-color: #2d2d2d;
     font-family: Helvetica, Arial;
-    font-size: 12px;
     color: white;
 }
 
-table th, table td {
-    padding: 10px 10px 9px;
-    line-height: 18px;
-    text-align: left;
-}
-
+/* Стили заголовков таблицы */
 table th {
-    padding-top: 9px;
+    padding: 12px;
+    line-height: 22px;
+    text-align: center;
     font-weight: bold;
     vertical-align: middle;
     color: #b6daff;
+    border: 1px solid #1f1f1f;
 }
 
+/* Стили ячеек данных */
 table td {
-    vertical-align: top;
-    border-top: 1px solid #ddd;
+    padding: 12px;
+    line-height: 22px;
+    text-align: center;
+    vertical-align: middle;
+    border-top: 1px solid #1f1f1f;
 }
 
-table th+th,table td+td,table th+td {
-    border-left: 1px solid #ddd;
+/* Границы между ячейками */
+table th + th, table td + td, table th + td {
+    border-left: 1px solid #1f1f1f;
 }
 
+/* Скругление углов для первой и последней ячеек в заголовке и данных */
 table thead tr:first-child th:first-child, table tbody tr:first-child td:first-child {
-    -webkit-border-radius: 5px 0 0 0;
-    -moz-border-radius: 5px 0 0 0;
     border-radius: 5px 0 0 0;
 }
 
 table thead tr:first-child th:last-child, table tbody tr:first-child td:last-child {
-    -webkit-border-radius: 0 5px 0 0;
-    -moz-border-radius: 0 5px 0 0;
     border-radius: 0 5px 0 0;
 }
 
 table tbody tr:last-child td:first-child {
-    -webkit-border-radius: 0 0 0 5px;
-    -moz-border-radius: 0 0 0 5px;
     border-radius: 0 0 0 5px;
 }
 
 table tbody tr:last-child td:last-child {
-    -webkit-border-radius: 0 0 5px 0;
-    -moz-border-radius: 0 0 5px 0;
     border-radius: 0 0 5px 0;
 }
 
-table tbody tr:nth-child(odd) td {
-	background-color: #323841;
+/* Цвет фона для четных строк */
+table tbody tr:nth-child(even) td {
+    background-color: #222;
 }
 
+/* Наведение на строку */
 table tbody tr:hover td {
-    background-color: #202223;
-	cursor: pointer;
+    background-color: #2F4F4F;
+    cursor: pointer;
+}
+
+/* Наведение на ячейку */
+table tbody tr td:hover {
+    border: 1px solid #888;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+
+.table td:hover {
+    background: #fffabe;
+}
+
+.table td:hover:after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    border: 3px solid orange;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    table td, table th {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    table tbody tr td:hover {
+        border: none;
+        padding: 6px;
+    }
 }

@@ -1,5 +1,6 @@
 from django.db import models
 from decimal import Decimal
+from django.contrib.auth.models import User
 
 
 class Fakulty(models.Model):
@@ -31,6 +32,7 @@ class Course(models.Model):
 class Group(models.Model):
     """ Гурппа студента """
     name = models.CharField(max_length=50)
+    link = models.CharField(max_length=50)
     faculty = models.ForeignKey(Fakulty, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
@@ -63,7 +65,7 @@ class Student(models.Model):
         ('M', 'Мужской'),
         ('W', 'Женский'),
     )
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     birth_date = models.DateField()
@@ -92,19 +94,42 @@ class Student(models.Model):
         verbose_name_plural = "Студенты"
 
 
+class Teacher(models.Model):
+    """Учителя"""
+    GENDER_CHOISE = (
+        ('M', 'Мужской'),
+        ('W', 'Женский'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField("Имя: ", max_length=50)
+    surname = models.CharField("Фамилия", max_length=50)
+    iin = models.CharField("ИИН: ", max_length=12)
+    gender = models.CharField("Пол: ", max_length=1, choices=GENDER_CHOISE)
+    subject = models.ManyToManyField(Subject, verbose_name="Предметы", related_name="subject")
+    group = models.ManyToManyField(Group, verbose_name="Группы: ", related_name="group")
+    url = models.SlugField("Уникальный адресс:", max_length=100, unique=True)
+
+    def __str__(self):
+        return f"{self.surname} {self.name} {self.subject} {self.group}"
+
+    class Meta:
+        verbose_name = "Учитель"
+        verbose_name_plural = "Учителя"
+
+
 class SRSone(models.Model):
     """Оценка за АКБ 1"""
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    week1 = models.IntegerField()
-    week2 = models.IntegerField()
-    week3 = models.IntegerField()
-    week4 = models.IntegerField()
-    week5 = models.IntegerField()
-    week6 = models.IntegerField()
-    week7 = models.IntegerField()
+    week1 = models.IntegerField(default=0)
+    week2 = models.IntegerField(default=0)
+    week3 = models.IntegerField(default=0)
+    week4 = models.IntegerField(default=0)
+    week5 = models.IntegerField(default=0)
+    week6 = models.IntegerField(default=0)
+    week7 = models.IntegerField(default=0)
     SRS_1 = models.IntegerField(default=0)
-    result = models.FloatField(null=True, blank=True)
+    result = models.FloatField(null=True, blank=True, default=0)
 
     def calculate_and_save_result(self):
         total_grade = self.week1 + self.week2 + \
@@ -131,16 +156,16 @@ class SRStwo(models.Model):
     """Оценка за АКБ 2"""
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    week8 = models.IntegerField()
-    week9 = models.IntegerField()
-    week10 = models.IntegerField()
-    week11 = models.IntegerField()
-    week12 = models.IntegerField()
-    week13 = models.IntegerField()
-    week14 = models.IntegerField()
-    week15 = models.IntegerField()
+    week8 = models.IntegerField(default=0)
+    week9 = models.IntegerField(default=0)
+    week10 = models.IntegerField(default=0)
+    week11 = models.IntegerField(default=0)
+    week12 = models.IntegerField(default=0)
+    week13 = models.IntegerField(default=0)
+    week14 = models.IntegerField(default=0)
+    week15 = models.IntegerField(default=0)
     SRS_2 = models.IntegerField(default=0)
-    result2 = models.FloatField(null=True, blank=True)
+    result2 = models.FloatField(null=True, blank=True, default=0)
 
     def calculate_and_save_result(self):
         total_grade = self.week8 + self.week9 + \
@@ -169,8 +194,8 @@ class FinalResult(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     SRS_1 = models.ForeignKey(SRSone, on_delete=models.CASCADE)
     SRS_2 = models.ForeignKey(SRStwo, on_delete=models.CASCADE)
-    exam_grade = models.IntegerField()
-    final_result2 = models.FloatField(blank=True, null=True)
+    exam_grade = models.IntegerField(default=0)
+    final_result2 = models.FloatField(blank=True, null=True, default=0)
 
     def calculate_final_result(self):
         SRS_sum = (self.SRS_1.result + self.SRS_2.SRS_2) / 2
@@ -190,4 +215,20 @@ class FinalResult(models.Model):
         verbose_name_plural = "Оценка за экзамены"
 
 
+class TeacherGroup(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student, related_name="students")
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    first = models.ManyToManyField(SRSone, related_name='srs_one')
+    second = models.ManyToManyField(SRStwo,  related_name='srs_two')
+    final = models.ManyToManyField(FinalResult)
+
+
+    def __str__(self):
+        return f"{self.subject} | {self.teacher}"
+
+    class Meta:
+        verbose_name = "Оценка группы"
+        verbose_name_plural = "Оценки группы"
 

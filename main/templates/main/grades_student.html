@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/stylefrr.css' %}">
+<title>{{ student.name }}</title>
+	<h2>{{ student.surname }} {{ student.name }} {{ student.gpa }} балл</h2>
+
+	<table border="1" cellpadding="0" cellspacing="0" width="50%" bgcolor="white"></table>
+	<table border="1" cellpadding="0" cellspacing="0" width="50%" bgcolor="white"><h1>1АКБ</h1></table>
+<!-- ---------------------------------------------------- ПЕРВОЕ АКБ ----------------------------------------------- -->
+    		<table>
+			<thead>
+				<tr>
+					<th>Предметы АКБ 1</th>
+					<th>1 неделя</th><th>2 неделя</th><th>3 неделя</th><th>4 неделя</th>
+					<th>5 неделея</th>	<th>6 неделя</th><th>7 неделя</th>
+					<th class="custom-header" >РК 1 оценка</th>
+					<th class="custom-header">РК 1 итог</th>
+				</tr>
+			</thead>
+			<tbody>
+            {% for srs_one in srs_ones %}
+				<tr>
+					<td>{{ srs_one.subject }}</td>
+
+					<td>{{ srs_one.week1 }}</td><td>{{ srs_one.week2 }}</td><td>{{ srs_one.week3 }}</td>
+					<td>{{ srs_one.week4 }}</td><td>{{ srs_one.week5 }}</td><td>{{ srs_one.week6 }}</td>
+					<td>{{ srs_one.week7 }}</td>
+					<td>{{ srs_one.SRS_1 }}</td>
+					<td>{{ srs_one.result|floatformat:0 }}</td>
+                </tr>
+            {% endfor %}
+			<table border="1" cellpadding="0" cellspacing="0" width="50%" bgcolor="white"></table>
+			<table border="1" cellpadding="0" cellspacing="0" width="50%" bgcolor="white"><h1>2 АКБ</h1></table>
+<!-- ---------------------------------------------------- КОНЕЦ ПЕРВОГО АКБ ---------------------------------------- -->
+<!-- ---------------------------------------------------- ВТОРОЕ АКБ ----------------------------------------------- -->
+					<table>
+					<thead>
+						<tr>
+							<th>Предметы АКБ 2</th>
+							<th>8 неделя</th><th>9 неделя</th><th>10 неделя</th>
+							<th>11 неделя</th><th>12 неделея</th><th>13 неделя</th>
+							<th>14 неделя</th><th>15 неделя</th>
+							<th class="custom-header">РК 2 оценка</th>
+							<th  class="custom-header">РК 2 итог</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for srs_two in srs_twos %}
+						<tr>
+							<td>{{ srs_two.subject }}</td>
+							<td>{{ srs_two.week8 }}</td>
+							<td>{{ srs_two.week9 }}</td>
+							<td>{{ srs_two.week10 }}</td>
+							<td>{{ srs_two.week11 }}</td>
+							<td>{{ srs_two.week12 }}</td>
+							<td>{{ srs_two.week13 }}</td>
+							<td>{{ srs_two.week14 }}</td>
+							<td>{{ srs_two.week15 }}</td>
+							<td>{{ srs_two.SRS_2 }}</td>
+							<td>{{ srs_two.result2|floatformat:0 }}</td>
+						</tr>
+						{% endfor %}
+						<br>
+
+<!-- ---------------------------------------------- КОНЕЦ ВТОРОГО АКБ ---------------------------------------------- -->
+{% endblock %}

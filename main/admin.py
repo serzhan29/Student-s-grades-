@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Student,Course, Fakulty, Subject, Group, SRStwo, SRSone, FinalResult
+from .models import Student,Course, Fakulty, Subject, Group, \
+    SRStwo, SRSone, FinalResult, Teacher, TeacherGroup
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -19,7 +20,7 @@ admin.site.register(SRSone, SRS_ONE)
 
 
 class SRS_TYO(admin.ModelAdmin):
-    list_display = ("id", "student", "subject", "week8", "week9", "week10",  "week11",  "week12",  "week13",  "week14", "week15", "SRS_2",)
+    list_display = ("id", "student", "subject", "week8", "week9", "week10",  "week11",  "week12",  "week13",  "week14", "week15", "SRS_2", )
     list_display_links = ("id", "student", "subject", )
     search_fields = ['id', 'student', 'subject']
     #list_filter = ['student', 'subject']
@@ -43,7 +44,15 @@ class FAKULTY(admin.ModelAdmin):
     list_display = ("id", "name", "code", )
     list_display_links = ("id", "name", )
 
-
 admin.site.register(Fakulty, FAKULTY)
+
+
+class TEACHER(admin.ModelAdmin):
+    list_display = ("id", "name", "surname",)
+    list_display_links = ("id", "name", "surname",)
+
+admin.site.register(Teacher, TEACHER)
+
 admin.site.register(Subject)
 admin.site.register(Group)
+admin.site.register(TeacherGroup)

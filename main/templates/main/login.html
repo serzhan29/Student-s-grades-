@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            width: 90%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px; /* Ограничиваем максимальную ширину */
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px; /* Увеличиваем размер заголовка */
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 16px; /* Увеличиваем размер текста для меток */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px; /* Увеличиваем внутренний отступ для полей ввода */
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Увеличиваем радиус скругления углов */
+            box-sizing: border-box;
+            font-size: 16px; /* Увеличиваем размер шрифта в полях ввода */
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 15px 20px; /* Увеличиваем внутренний отступ кнопки */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px; /* Увеличиваем отступ между полем ввода и кнопкой */
+            font-size: 16px; /* Увеличиваем размер шрифта на кнопке */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                max-width: 10%;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            input[type="text"],
+            input[type="password"] {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            input[type="submit"] {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html>
