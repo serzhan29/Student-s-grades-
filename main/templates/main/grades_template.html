@@ -65,18 +65,35 @@
   }
 
 </style>
-
-<h1></h1>
+<style>
+    .calculate-result-btn {
+        background-color: #4CAF50; /* Зеленый цвет */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px; /* Закругленные углы */
+    }
+</style>
+<br>
+<br>
 <br>
 <hr>
 <br>
 {% if subjects_taught %}
 <!-- АКБ-1 -->
+<!-- 123 -->
+
 <table>
     <thead>
         <tr>
-            <th>Surname</th>
-            <th>Name</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
             <th> 1 </th>
             <th> 2 </th>
             <th> 3 </th>
@@ -89,25 +106,43 @@
         </tr>
     </thead>
     <tbody>
-        {% for student, grade in zipped_data %}
-            <tr>
-                <td>{{ student.surname }}</td>
-                <td>{{ student.name }}</td>
-                <td>
-                    <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="1" data-srs-type="1">{{ grade.week1 }}</button>
-                </td>
-                <td>{{ grade.week2 }}</td>
-                <td>{{ grade.week3 }}</td>
-                <td>{{ grade.week4 }}</td>
-                <td>{{ grade.week5 }}</td>
-                <td>{{ grade.week6 }}</td>
-                <td>{{ grade.week7 }}</td>
-                <td>{{ grade.SRS_1 }}</td>
-                <td>{{ grade.result }}</td>
-            </tr>
-        {% endfor %}
+            {% for student, grade in zipped_data %}
+                <tr>
+                    <td>{{ student.surname }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="1" data-srs-type="1" data-table-type="1">{{ grade.week1 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="2" data-srs-type="1" data-table-type="1">{{ grade.week2 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="3" data-srs-type="1" data-table-type="1">{{ grade.week3 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="4" data-srs-type="1" data-table-type="1">{{ grade.week4 }}</button></td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="5" data-srs-type="1" data-table-type="1">{{ grade.week5 }}</button></td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="6" data-srs-type="1" data-table-type="1">{{ grade.week6 }}</button></td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="7" data-srs-type="1" data-table-type="1">{{ grade.week7 }}</button></td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}"  data-week="71" data-srs-type="1" data-table-type="1">{{ grade.week71 }}</button>
+                    </td>
+                    <td>
+                        {{ grade.result }}
+                        <form method="POST" action="{% url 'calculate_and_save_result_srsone' teacher_url=teacher_url group_link=group_link %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="srsone_id" value="{{ grade.id }}">
+                            <input class="calculate-result-btn" type="submit" value="Рассчет результата">
+                        </form>
+                    </td>
+
+                </tr>
+            {% endfor %}
 {% else %}
-    <p>No subjects taught by this teacher in the specified group.</p>
+    <p>Вы этой группе не преподаете</p>
 {% endif %}
 </table>
 <br>
@@ -139,82 +174,181 @@
                     <td>{{ student.surname }}</td>
                     <td>{{ student.name }}</td>
                     <td>
-                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="1" data-srs-type="1">{{ grade2.week8 }}</button>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="8" data-srs-type="2" data-table-type="2">{{ grade2.week8 }}</button>
                     </td>
-                    <td>{{ grade2.week9 }}</td>
-                    <td>{{ grade2.week10 }}</td>
-                    <td>{{ grade2.week11 }}</td>
-                    <td>{{ grade2.week12 }}</td>
-                    <td>{{ grade2.week13 }}</td>
-                    <td>{{ grade2.week14 }}</td>
-                    <td>{{ grade2.week15 }}</td>
-                    <td>{{ grade2.SRS_2 }}</td>
-                    <td>{{ grade2.result2 }}</td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="9" data-srs-type="2" data-table-type="2">{{ grade2.week9 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="10" data-srs-type="2" data-table-type="2">{{ grade2.week10 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="11" data-srs-type="2" data-table-type="2">{{ grade2.week11 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="12" data-srs-type="2" data-table-type="2">{{ grade2.week12 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="13" data-srs-type="2" data-table-type="2">{{ grade2.week13 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="14" data-srs-type="2" data-table-type="2">{{ grade2.week14 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}" data-week="15" data-srs-type="2" data-table-type="2">{{ grade2.week15 }}</button>
+                    </td>
+                    <td>
+                        <button class="edit-grade-btn" data-student-id="{{ student.id }}"  data-week="16" data-srs-type="2" data-table-type="2">{{ grade2.week16 }}</button>
+                    </td>
+                    <td>
+                        {{ grade2.result2 }}
+                        <form method="POST" action="{% url 'calculate_and_save_result' teacher_url=teacher_url group_link=group_link %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="srstwo_id" value="{{ grade2.id }}">
+                            <input class="calculate-result-btn" type="submit" value="Рассчет результата">
+                        </form>
+                    </td>
+
                 </tr>
             {% endfor %}
+
         </tbody>
     </table>
 {% else %}
-    <p>No subjects taught by this teacher in the specified group.</p>
+    <p>Вы этой группе не преподаете</p>
 {% endif %}
 
-  <!-- Модальное окно -->
-  <div id="grade-modal" class="modal">
+<!-- Модальное окно -->
+<div id="grade-modal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <h4>Выберите оценку:</h4>
-      <form method="POST" id="grade-form">
-        {% csrf_token %}
-        <input type="hidden" name="student_id" id="modal-student-id" value="">
-        <input type="hidden" name="week" id="modal-week" value="">
-        <label for="grade">Оценка: </label>
-        <input type="number" name="grade" id="modal-grade" min="0" max="100">
-        <label for="converted_grade">Посещение:</label>
-        <select name="converted_grade" id="modal-converted-grade">
-          <option value="+">Был</option>
-          <option value="Н">Нету</option>
-        </select>
-        <button type="submit" id="modal-submit">Сохранить</button>
-      </form>
+        <span class="close">&times;</span>
+        <h4>Выберите оценку:</h4>
+        <!-- Исправленный идентификатор формы -->
+        <form method="POST" id="grade-form" action="{% url 'update_grade' teacher_url=teacher_url group_link=group_link %}">
+            {% csrf_token %}
+            <input type="hidden" name="student_id" id="modal-student-id" value="">
+            <input type="hidden" name="week" id="modal-week" value="">
+            <input type="hidden" name="srs_type" id="modal-srs-type" value="">
+            <input type="hidden" name="table_type" id="modal-table-type" value=""> <!-- Добавлено -->
+            <label for="new_grade">Оценка: </label>
+            <input type="number" name="new_grade" id="modal-new-grade" min="0" max="100">
+            <button type="submit" id="modal-submit">Сохранить</button>
+        </form>
     </div>
-  </div>
+</div>
 
-  <script>
-    // Открыть модальное окно при нажатии на ячейку
-    const cells = document.getElementsByClassName('edit-grade-btn');
-    const modal = document.getElementById('grade-modal');
-    const span = document.getElementsByClassName('close')[0];
-    const form = document.getElementById('grade-form');
-    const studentIdInput = document.getElementById('modal-student-id');
-    const weekInput = document.getElementById('modal-week');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cells = document.getElementsByClassName('edit-grade-btn');
+        const modal = document.getElementById('grade-modal');
+        const span = document.getElementsByClassName('close')[0];
+        const form = document.getElementById('grade-form');
+        const studentIdInput = document.getElementById('modal-student-id');
+        const weekInput = document.getElementById('modal-week');
+        const srsTypeInput = document.getElementById('modal-srs-type');
+        const tableTypeInput = document.getElementById('modal-table-type');
+        const newGradeInput = document.getElementById('modal-new-grade');
 
-    Array.from(cells).forEach(cell => {
-      cell.addEventListener('click', () => {
-        const studentId = cell.dataset.studentId;
-        const week = cell.dataset.week;
-        studentIdInput.value = studentId;
-        weekInput.value = week;
-        modal.style.display = 'block';
-      });
+        function getColorForGrade(grade) {
+            if (grade >= 0 && grade < 50) {
+                return 'red';
+            } else if (grade >= 50 && grade < 70) {
+                return 'orange';
+            } else if (grade >= 70 && grade < 90) {
+                return 'blue';
+            } else if (grade >= 90 && grade <= 100) {
+                return 'green';
+            } else {
+                return '';
+            }
+        }
+
+        function handleButtonClick(cell) {
+            const studentId = cell.dataset.studentId;
+            const week = cell.dataset.week;
+            const srsType = cell.dataset.srsType;
+            const tableType = cell.dataset.tableType;
+            studentIdInput.value = studentId;
+            weekInput.value = week;
+            srsTypeInput.value = srsType;
+            tableTypeInput.value = tableType;
+            modal.style.display = 'block';
+        }
+
+        Array.from(cells).forEach(cell => {
+            cell.addEventListener('click', () => handleButtonClick(cell));
+            const currentGrade = parseInt(cell.innerHTML);
+            const color = getColorForGrade(currentGrade);
+            cell.style.backgroundColor = color;
+        });
+
+        span.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const studentId = studentIdInput.value;
+            const week = weekInput.value;
+            const srsType = srsTypeInput.value;
+            const tableType = tableTypeInput.value;
+            const newGrade = newGradeInput.value;
+
+            if (newGrade < 0 || newGrade > 100) {
+                console.log('Invalid grade. Grade should be between 0 and 100.');
+                alert('Invalid grade. Grade should be between 0 and 100.');
+                return;
+            }
+
+            try {
+                const formData = new FormData(form);
+                formData.append('student_id', studentId);
+                formData.append('week', week);
+                formData.append('srs_type', srsType);
+                formData.append('table_type', tableType);
+                formData.append('new_grade', newGrade);
+
+                const response = await fetch('{% url "update_grade" teacher_url=teacher_url group_link=group_link %}', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin',  // Ensure credentials are included
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const cellToUpdate = document.querySelector(`[data-student-id="${studentId}"][data-week="${week}"][data-srs-type="${srsType}"][data-table-type="${tableType}"]`);
+                        const color = getColorForGrade(newGrade);
+                        cellToUpdate.innerHTML = newGrade;
+                        cellToUpdate.style.backgroundColor = color;
+
+                        console.log('Grade updated successfully');
+                    } else {
+                        alert('Error updating grade: ' + data.error);
+                    }
+                } else {
+                    console.error('Fetch error:', response.statusText);
+                    alert('Error updating grade. Please try again.');
+                }
+            } catch (error) {
+                console.error('Unexpected error:', error);
+                alert('Unexpected error. Please try again.');
+            }
+
+            modal.style.display = 'none';
+        });
     });
+</script>
 
-    // Закрыть модальное окно при нажатии на "Крестик"
-    span.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
 
-    // Закрыть модальное окно при нажатии вне его области
-    window.addEventListener('click', (event) => {
-      if (event.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
 
-    // Отправить форму при нажатии на "Сохранить"
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      // Добавьте здесь код для отправки формы AJAX
-      // и обработки серверного ответа
-    });
-  </script>
+
+
 {% endblock %}
