@@ -19,31 +19,34 @@
         <i class="fas fa-qrcode"></i>
         <span>Главная</span>
       </a>
-      {% if user.teacher %}
-        <a href="{% url 'teacher_profile' slug=user.teacher.url %}" class="{% if request.resolver_match.url_name == 'teacher_profile' %}active{% endif %}">
-          <i class="fas fa-user"></i>
-          <span>Профиль</span>
-        </a>
-      {% else %}
-        <a href="{% url 'student_profile' slug=user.student.url %}" class="{% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
-          <i class="fas fa-user"></i>
-          <span>Профиль</span>
-        </a>
+
+      {% if user.student and user.student.url %}
+          <a href="{% url 'student_profile' slug=user.student.url %}" class="{% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
+              <i class="fas fa-user"></i>
+              <span>Профиль</span>
+          </a>
       {% endif %}
+
+      {% if user.teacher and user.teacher.url %}
+          <a href="{% url 'teacher_profile' slug=user.teacher.url %}" class="{% if request.resolver_match.url_name == 'teacher_profile' %}active{% endif %}">
+              <i class="fas fa-user"></i>
+              <span>Профиль</span>
+          </a>
+      {% endif %}
+
       {% if user.student and user.student.url %}
         <a href="{% url 'grades' slug=user.student.url %}" class="{% if request.resolver_match.url_name == 'grades' %}active{% endif %}">
            <i class="fas fa-calendar"></i>
           <span>Оценки</span>
         </a>
       {% endif %}
-      {% for group in user.teacher.group.all %}
-          {% if user.teacher %}
-              <a href="{% url 'teacher_groups' slug=user.teacher.url %}" class="{% if request.resolver_match.url_name == 'teacher_groups' %}active{% endif %}">
-                  <i class="fas fa-user-friends"></i>
-                      <span>Группы</span>
-              </a>
-          {% endif %}
-      {% endfor %}
+      {% if user.teacher and user.teacher.group.all %}
+            <a href="{% url 'teacher_groups' slug=user.teacher.url %}" class="{% if request.resolver_match.url_name == 'teacher_groups' %}active{% endif %}">
+                <i class="fas fa-user-friends"></i>
+                <span>Группы</span>
+            </a>
+      {% endif %}
+
 
       <a href="">
         <i class="far fa-question-circle"></i>
