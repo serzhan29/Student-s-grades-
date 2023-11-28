@@ -128,7 +128,7 @@ class SRSone(models.Model):
     week5 = models.IntegerField(default=0)
     week6 = models.IntegerField(default=0)
     week7 = models.IntegerField(default=0)
-    SRS_1 = models.IntegerField(default=0)
+    week71 = models.IntegerField(default=0)
     result = models.FloatField(null=True, blank=True, default=0)
 
     def calculate_and_save_result(self):
@@ -139,7 +139,7 @@ class SRSone(models.Model):
 
         average_grade = total_grade / 7
 
-        result = (average_grade + self.SRS_1) / 2
+        result = (average_grade + self.week71) / 2
         rounded_result = round(result, 0)  # Округление результата до двух десятичных знаков
         self.result = rounded_result # Сохраняет округленный результат в поле result
         self.save()  # Сохраняет объект в базе данных
@@ -164,7 +164,7 @@ class SRStwo(models.Model):
     week13 = models.IntegerField(default=0)
     week14 = models.IntegerField(default=0)
     week15 = models.IntegerField(default=0)
-    SRS_2 = models.IntegerField(default=0)
+    week16 = models.IntegerField(default=0)
     result2 = models.FloatField(null=True, blank=True, default=0)
 
     def calculate_and_save_result(self):
@@ -175,7 +175,7 @@ class SRStwo(models.Model):
 
         average_grade = total_grade / 8
 
-        result2 = (average_grade + self.SRS_2) / 2
+        result2 = (average_grade + self.week16) / 2
         rounded_result2 = round(result2, 0)  # Округление результата до двух десятичных знаков
         self.result2 = rounded_result2  # Сохраняет округленный результат в поле result2
         self.save()  # Сохраняет объект в базе данных
@@ -198,7 +198,7 @@ class FinalResult(models.Model):
     final_result2 = models.FloatField(blank=True, null=True, default=0)
 
     def calculate_final_result(self):
-        SRS_sum = (self.SRS_1.result + self.SRS_2.SRS_2) / 2
+        SRS_sum = (self.SRS_1.result + self.SRS_2.result2) / 2
         SRS_weighted = SRS_sum * 0.4
         exam_weighted = self.exam_grade * 0.6
 
