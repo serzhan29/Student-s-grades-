@@ -142,8 +142,8 @@ INTERNAL_IPS = [
 ]
 
 # settings.py
-LOGIN_URL = 'login'  # Укажите URL для авторизации
-LOGIN_REDIRECT_URL = 'home'  # Укажите URL для перенаправления после успешного входа
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
 
 
 
