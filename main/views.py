@@ -176,14 +176,12 @@ def teacher_subject_grades(request, teacher_url, group_link):
 
         students_in_group = Student.objects.filter(group__link=group_link).order_by('surname', 'name')
         student_grades = SRSone.objects.filter(student__in=students_in_group, subject__in=subjects_taught).order_by(
-            'student__surname', 'student__name', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'SRS_1',
+            'student__surname', 'student__name', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'week71',
             'result')
 
         student_grades_2 = SRStwo.objects.filter(student__in=students_in_group, subject__in=subjects_taught).order_by(
             'student__surname', 'student__name', 'week8', 'week9', 'week10', 'week11', 'week12', 'week13', 'week14',
-            'week15'
-        ).select_related('student').only('student__surname', 'student__name', 'week8', 'week9', 'week10', 'week11',
-                                         'week12', 'week13', 'week14', 'week15', 'SRS_2', 'result2')
+            'week15', 'week16', 'result2' )
 
         zipped_data = zip(students_in_group, student_grades)
         zipped_data_2 = zip(students_in_group, student_grades_2)
@@ -195,6 +193,7 @@ def teacher_subject_grades(request, teacher_url, group_link):
             'srs_two_grades': student_grades_2,
             'zipped_data': zipped_data,
             'zipped_data_2': zipped_data_2,
+            'teacher_url': teacher_url,  # Добавьте teacher_url в контекст
         }
 
         return render(request, 'main/grades_template.html', context)
@@ -202,31 +201,71 @@ def teacher_subject_grades(request, teacher_url, group_link):
         return render(request, 'main/no_permission.html', status=403)
 
 
-def get_grade(request):
-    if request.method == 'GET':
-        student_id = request.GET.get('student_id')
-        week = request.GET.get('week')
-        srs_type = request.GET.get('srs_type')
-
-        # Реализуйте логику получения оценки из базы данных
-        # Верните оценку в формате JSON
-        return JsonResponse({'grade': 75})  # Замените 75 на актуальное значение оценки
-
-
-def save_grade(request):
+def update_grade(request, teacher_url, group_link):
     if request.method == 'POST':
-        student_id = request.POST.get('student_id')
-        week = request.POST.get('week')
-        srs_type = request.POST.get('srs_type')
-        new_grade = request.POST.get('new_grade')
+        # Получаем данные из POST-запроса
+        student_id = request.POST.get('student_id')  # Идентификатор студента
+        week = request.POST.get('week')  # Номер недели
+        srs_type = request.POST.get('srs_type')  # Тип SRS (1 или 2)
+        new_grade = request.POST.get('new_grade')  # Новая оценка
 
-        # Реализуйте логику сохранения новой оценки в базе данных
+        try:
+            # Определяем тип SRS и получаем объект оценок студента
+            if srs_type == '1':
+                student_grade = SRSone.objects.filter(student_id=student_id).first()
+            elif srs_type == '2':
+                student_grade = SRStwo.objects.filter(student_id=student_id).first()
+            else:
+                return JsonResponse({'success': False, 'error': 'Недопустимый тип SRS'})
 
-        return HttpResponse(status=200)
+            # Если объект оценок студента существует, обновляем оценку
+            if student_grade:
+                setattr(student_grade, f'week{week}', new_grade)
+                student_grade.save()
 
-    return HttpResponse(status=400)
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'Оценка не найдена'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
 
 
+
+def calculate_and_save_result(request, teacher_url, group_link):
+    user = request.user
+
+    # Получите учителя
+    teacher = get_object_or_404(Teacher, url=teacher_url)
+
+    # Проверьте, имеет ли пользователь право на выполнение этой операции
+    if user.groups.filter(name='Teacher').exists() and teacher == user.teacher:
+        if request.method == 'POST':
+            # Получите идентификатор SRStwo из POST-запроса
+            srstwo_id = request.POST.get('srstwo_id')
+            if srstwo_id:
+                srstwo = get_object_or_404(SRStwo, id=srstwo_id)
+                srstwo.calculate_and_save_result()
+
+    # Перенаправьте на страницу с оценками
+    return redirect('teacher_subject_grades', teacher_url=teacher_url, group_link=group_link)
+
+def calculate_and_save_result_srsone(request, teacher_url, group_link):
+    user = request.user
+
+    # Получите учителя
+    teacher = get_object_or_404(Teacher, url=teacher_url)
+
+    # Проверьте, имеет ли пользователь право на выполнение этой операции
+    if user.groups.filter(name='Teacher').exists() and teacher == user.teacher:
+        if request.method == 'POST':
+            # Получите идентификатор SRSone из POST-запроса
+            srsone_id = request.POST.get('srsone_id')
+            if srsone_id:
+                srsone = get_object_or_404(SRSone, id=srsone_id)
+                srsone.calculate_and_save_result()
+
+    # Перенаправьте на страницу с оценками
+    return redirect('teacher_subject_grades', teacher_url=teacher_url, group_link=group_link)
 
 
